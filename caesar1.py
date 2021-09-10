@@ -34,21 +34,21 @@ def is_unique(s):
 #     return ''.join(result)
 
 
-def removeDuplicateAlphabet(str, alphabet): #удаление ключа из алфавита
-    for i in alphabet:
-        for j in str:
-            if i == j:
-                alphabet = alphabet.replace(i, '')
-    return alphabet
-
-
-def caesar(NewAlphabet, Alphabet, text):
-    Message = []
-    for character in text:
-        index = Alphabet.index(character)
-        character = NewAlphabet[index]
-        Message.append(character)
-    return ''.join(Message)
+# def removeDuplicateAlphabet(str, alphabet): #удаление ключа из алфавита
+#     for i in alphabet:
+#         for j in str:
+#             if i == j:
+#                 alphabet = alphabet.replace(i, '')
+#     return alphabet
+#
+#
+# def caesar(NewAlphabet, Alphabet, text):
+#     Message = []
+#     for character in text:
+#         index = Alphabet.index(character)
+#         character = NewAlphabet[index]
+#         Message.append(character)
+#     return ''.join(Message)
 
 
 # NewAlphabet = removeDuplicateAlphabet(key, Alphabet)
