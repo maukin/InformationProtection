@@ -42,9 +42,9 @@ def caesar(key, index, text):
         except ValueError:
             message.append(character)
 
-    print('\nОригинальный алфавит:\t' + Alphabet)
-    print('Новый алфавит:\t\t\t' + NewAlphabet)
-    print("Зашифрованный текст: " + ''.join(message))
+    # print('\nОригинальный алфавит:\t' + Alphabet)
+    # print('Новый алфавит:\t\t\t' + NewAlphabet)
+    # print("Зашифрованный текст: " + ''.join(message))
 
     return ''.join(message) #, NewAlphabet
 

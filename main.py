@@ -41,6 +41,7 @@ def input_message():
 
 
 spec_chars = string.punctuation + '\n\xa0«»\t—… '
+spec_chars2 = "!\"#$%&'()*+-./:;<=>?@[\]^_`{|}~" + "\xa0,\xa0"
 
 Alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 FrequencyOfLetters = 'оеаинтсрвлкмдпуяыьгзбчйхжшюцщэфъё'
@@ -68,15 +69,31 @@ while 1:
             c.caesar2(key2, message2)
 
         elif number == 3:
-            print("~~~~\tШифрование и дешифрование главвы книги\t~~~~")
+            print("~~~~\tШифрование и дешифрование главы книги\t~~~~")
             with open('texts/WarAndPeaceOriginal.txt', 'rt') as text_original:
             # with open('texts/war.txt', 'rt', encoding="utf-8") as text_original:
+
+                # ccc1 = text_original.read()
+                # ccc1 = Counter(re.findall(r'(?=([а-я]{2}))', ccc1))
+                # print("Original: ")
+                # print(ccc1.most_common(10))
 
                 poem = text_original.read()
                 poem = (re.sub('[a-z|A-Z|A-Z|a-z]', '', poem)).lower()  # .strip()
 
                 poem2 = remove_chars_from_text(poem, spec_chars)
                 poem2 = remove_chars_from_text(poem, string.digits)
+
+                ccc1 = Counter(re.findall(r'(?=([а-я]{2}))', poem2)).most_common(10)
+                print("Original: ")
+                # print(ccc1)
+
+                new_list2 = str(ccc1)
+                new_list2 = remove_chars_from_text(new_list2, string.digits)
+                new_list2 = remove_chars_from_text(new_list2, spec_chars2).split()
+                print(new_list2)
+
+
 
                 # num = Counter(poem2)
                 # new_str = str(num)
@@ -109,7 +126,7 @@ while 1:
             new_list = remove_chars_from_text(new_list, spec_chars)
             new_list = remove_chars_from_text(new_list, string.digits)
             new_list = new_list[7:]
-            print(new_list)
+            # print(new_list)
 
             with open('texts/WarAndPeaceDecrypted.txt', 'wt') as text_decrypted:
                 for char_new in new_text:
@@ -120,6 +137,30 @@ while 1:
                     except ValueError:
                         Message3.append(char_new)
                 text_decrypted.write(''.join(Message3))
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ БИГРАМНЫЙ АНАЛИЗ ТУТ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            with open('texts/WarAndPeaceDecrypted.txt', 'rt') as text_decrypted2:
+                ccc = text_decrypted2.read()
+                ccc = Counter(re.findall(r'(?=([а-я]{2}))', ccc)).most_common(10)
+                print("New: ")
+                # print(ccc)
+
+                new_list3 = str(ccc)
+                new_list3 = remove_chars_from_text(new_list3, string.digits)
+                new_list3 = remove_chars_from_text(new_list3, spec_chars2).split()
+                print(new_list3)
+
+
+            for a in range(len(new_list3)):
+                if new_list3[a] != new_list2[a]:
+                    print(new_list3[a])
+
+
+
+
 
             text_original.close()
             text_encrypted.close()
