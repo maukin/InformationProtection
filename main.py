@@ -63,14 +63,14 @@ while 1:
             with open('texts/WarAndPeaceOriginal.txt', 'rt') as text_original: #открываем файл для чтения
             # with open('texts/war.txt', 'rt', encoding="utf-8") as text_original:
                 poem = text_original.read()
-                poem = (re.sub('[a-z|A-Z|A-Z|a-z]', '', poem)).lower()  # .strip() #удаление нерусских символов
+                poem = (re.sub('[a-z|A-Z|A-Z|a-z]', '', poem)).lower() # .strip() #удаление нерусских символов
 
-                poem2 = poem.lower()
+
                 poem2 = remove_chars_from_text(poem, spec_chars) #удаление специальных символов
                 poem2 = remove_chars_from_text(poem, string.digits) #удаление чисел
 
                 bigrams = Counter(re.findall(r'(?=([а-я]{2}))', poem2)).most_common(10) #подсчёт 10 самых популярных биграм в оригинальном тексте
-                print("Original: ")
+                print("Биграммы в оригинальном тексте: ")
                 # print(bigrams)
 
                 list_of_bigrams = str(bigrams)
@@ -124,7 +124,7 @@ while 1:
                 bigrams_new = text_decrypted2.read()
                 # подсчёт 10 популярных биграм в расщиврованном тексте
                 bigrams_new = Counter(re.findall(r'(?=([а-я]{2}))', bigrams_new)).most_common(10)
-                print("New: ")
+                print("Биграммы в расшифрованном тексте: ")
                 # print(bigrams_new)
                 list_of_letters3 = str(bigrams_new)
                 list_of_letters3 = remove_chars_from_text(list_of_letters3, string.digits)
@@ -158,6 +158,7 @@ while 1:
             qq = q.read()
             Message4 = []
             with open('texts/WarAndPeaceDecryptedBetter.txt', 'wt') as text_decrypted3:
+                # улучшаем расшифровку текста с помощью биграм
                 for charr in qq:
                     try:
                         index1 = FrequencyOfLetters.index(charr)
@@ -172,13 +173,11 @@ while 1:
 
                 text_decrypted3.write(''.join(Message4))
 
-
-
-            # text_original.close()
-            # text_encrypted.close()
-            # text_decrypted.close()
-            # text_decrypted2.close()
-            # text_decrypted3.close()
+            text_original.close()
+            text_encrypted.close()
+            text_decrypted.close()
+            text_decrypted2.close()
+            text_decrypted3.close()
 
         elif number == 0:
             break

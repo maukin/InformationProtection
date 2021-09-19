@@ -76,7 +76,6 @@ def caesar2(key2, text):
             new_char = NewAlphabet2[index]
             new_index = Alphabet.index(new_char)
             character2 = Alphabet[((index + new_index) % len(Alphabet))]
-            # print("индекс " + str((index + new_index) % len(alphabet)))
             message.append(character2)
         else:
             message.append(character)
