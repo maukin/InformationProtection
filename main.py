@@ -17,18 +17,10 @@ def input_key():
     return func_key
 
 
-def is_digit(ind):
-    try:
-        int(ind)
-        return True
-    except ValueError:
-        return False
-
-
 def input_index():
     print("Введите индекс сдвига:")
     func_index = input()
-    while not is_digit(func_index) or (int(func_index) > 32 or int(func_index) < 0):
+    while not func_index.isdigit() or (int(func_index) > 32 or int(func_index) < 0):
         print("Неправильный индекс, повторите ввод")
         func_index = input()
     return func_index
@@ -51,68 +43,54 @@ while 1:
     number = input()
     if number.isdigit():
         number = int(number)
+
         if number == 1:
             print("~~~~\tШифр цезаря с ключом и сдвигом\t~~~~")
             key = input_key()
             index = input_index()
             message = input_message()
-
-            # print("Зашифрованный текст: " + c.caesar(key, index, message))
-            c.caesar(key, index, message)
+            c.caesar(key, index, message, is_print=True)
 
         elif number == 2:
             print("~~~~\tШифр цезаря модифицированный\t~~~~")
             key2 = input_key()
             message2 = input_message()
-
-            # print("Зашифрованный текст: " + c.caesar2(key2, message2))
             c.caesar2(key2, message2)
 
         elif number == 3:
             print("~~~~\tШифрование и дешифрование главы книги\t~~~~")
-            with open('texts/WarAndPeaceOriginal.txt', 'rt') as text_original:
+
+            with open('texts/WarAndPeaceOriginal.txt', 'rt') as text_original: #открываем файл для чтения
             # with open('texts/war.txt', 'rt', encoding="utf-8") as text_original:
-
-                # ccc1 = text_original.read()
-                # ccc1 = Counter(re.findall(r'(?=([а-я]{2}))', ccc1))
-                # print("Original: ")
-                # print(ccc1.most_common(10))
-
                 poem = text_original.read()
-                poem = (re.sub('[a-z|A-Z|A-Z|a-z]', '', poem)).lower()  # .strip()
+                poem = (re.sub('[a-z|A-Z|A-Z|a-z]', '', poem)).lower()  # .strip() #удаление нерусских символов
 
-                poem2 = remove_chars_from_text(poem, spec_chars)
-                poem2 = remove_chars_from_text(poem, string.digits)
+                poem2 = poem.lower()
+                poem2 = remove_chars_from_text(poem, spec_chars) #удаление специальных символов
+                poem2 = remove_chars_from_text(poem, string.digits) #удаление чисел
 
-                ccc1 = Counter(re.findall(r'(?=([а-я]{2}))', poem2)).most_common(10)
+                bigrams = Counter(re.findall(r'(?=([а-я]{2}))', poem2)).most_common(10) #подсчёт 10 самых популярных биграм в оригинальном тексте
                 print("Original: ")
-                # print(ccc1)
+                # print(bigrams)
 
-                new_list2 = str(ccc1)
-                new_list2 = remove_chars_from_text(new_list2, string.digits)
-                new_list2 = remove_chars_from_text(new_list2, spec_chars2).split()
-                print(new_list2)
-
-
-
-                # num = Counter(poem2)
-                # new_str = str(num)
-                # print(new_str)
-                # print("\n" + str(num))
+                list_of_bigrams = str(bigrams)
+                list_of_bigrams = remove_chars_from_text(list_of_bigrams, string.digits)
+                list_of_bigrams = remove_chars_from_text(list_of_bigrams, spec_chars2).split()
+                print(list_of_bigrams)
 
             key = 'ключ'
             index = 3
             # key = input_key()
             # index = input_index()
-
-            # c.caesar(key, index, poem2)
+            # c.caesar(key, index, poem2, is_print = False)
 
             with open('texts/WarAndPeaceEncrypted.txt', 'w') as text_encrypted:
-                text_encrypted.write(c.caesar(key, index, poem2))
+                # запись в файл зашифрованного цезарем текста
+                text_encrypted.write(c.caesar(key, index, poem, is_print=False)) #poem2
 
-            new_text = c.caesar(key, index, poem2)
+            new_text = c.caesar(key, index, poem, is_print=False) #poem2
 
-            letters_decr = Counter("".join([ch for ch in new_text if ch in Alphabet]))
+            letters_decr = Counter("".join([ch for ch in new_text if ch in Alphabet])) #подсчёт букв по популярности
             # print(letters_decr)
             # list_of_letters = list(letters_decr.items())
             # list_of_letters.sort(key=lambda i: i[1])
@@ -121,50 +99,86 @@ while 1:
 
             Message3 = []
 
-            new_list = str(letters_decr)
-            # new_list = str(list_of_letters)
-            new_list = remove_chars_from_text(new_list, spec_chars)
-            new_list = remove_chars_from_text(new_list, string.digits)
-            new_list = new_list[7:]
-            # print(new_list)
+            list_of_letters = str(letters_decr)
+            # list_of_letters = str(list_of_letters)
+            list_of_letters = remove_chars_from_text(list_of_letters, spec_chars)
+            list_of_letters = remove_chars_from_text(list_of_letters, string.digits)
+            list_of_letters = list_of_letters[7:]
+            # print(list_of_letters)
 
             with open('texts/WarAndPeaceDecrypted.txt', 'wt') as text_decrypted:
+            #запись в файл расшифрованного цезарем текста
                 for char_new in new_text:
                     try:
-                        index_new = new_list.index(char_new)
+                        index_new = list_of_letters.index(char_new)
                         new_char = FrequencyOfLetters[index_new]
                         Message3.append(new_char)
                     except ValueError:
                         Message3.append(char_new)
                 text_decrypted.write(''.join(Message3))
 
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ БИГРАМНЫЙ АНАЛИЗ ТУТ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            FrequencyOfLettersUpd = FrequencyOfLetters
+            FrequencyOfLettersUpd = list(FrequencyOfLettersUpd)
 
             with open('texts/WarAndPeaceDecrypted.txt', 'rt') as text_decrypted2:
-                ccc = text_decrypted2.read()
-                ccc = Counter(re.findall(r'(?=([а-я]{2}))', ccc)).most_common(10)
+                bigrams_new = text_decrypted2.read()
+                # подсчёт 10 популярных биграм в расщиврованном тексте
+                bigrams_new = Counter(re.findall(r'(?=([а-я]{2}))', bigrams_new)).most_common(10)
                 print("New: ")
-                # print(ccc)
-
-                new_list3 = str(ccc)
-                new_list3 = remove_chars_from_text(new_list3, string.digits)
-                new_list3 = remove_chars_from_text(new_list3, spec_chars2).split()
-                print(new_list3)
-
-
-            for a in range(len(new_list3)):
-                if new_list3[a] != new_list2[a]:
-                    print(new_list3[a])
+                # print(bigrams_new)
+                list_of_letters3 = str(bigrams_new)
+                list_of_letters3 = remove_chars_from_text(list_of_letters3, string.digits)
+                list_of_letters3 = remove_chars_from_text(list_of_letters3, spec_chars2).split()
+                print(list_of_letters3)
 
 
+            for a in range(len(list_of_letters3)):
+                if list_of_letters3[a] != list_of_bigrams[a]:
+                    # for x, y in product(list_of_letters3[a], list_of_bigrams[a]):
+                    x = list_of_letters3[a]
+                    y = list_of_bigrams[a]
+                    # находим и меняем неправильный символ
+                    if x[0] != y[0]:
+                        index1 = FrequencyOfLetters.index(x[0])
+                        FrequencyOfLettersUpd[index1] = y[0]
+                        index11 = FrequencyOfLetters.index(y[0])
+                        FrequencyOfLettersUpd[index11] = x[0]
+                    if x[1] != y[1]:
+                        index2 = FrequencyOfLetters.index(x[1])
+                        FrequencyOfLettersUpd[index2] = y[1]
+                        index22 = FrequencyOfLetters.index(x[1])
+                        FrequencyOfLettersUpd[index22] = y[1]
+                    # print(list_of_letters3[a])
+            print("\nАлфавит до биграммного анализа: ")
+            print(list(FrequencyOfLetters))
+            print("Алфавит после биграммного анализа:")
+            print(FrequencyOfLettersUpd)
+
+            q = open('texts/WarAndPeaceDecrypted.txt', 'r')
+            qq = q.read()
+            Message4 = []
+            with open('texts/WarAndPeaceDecryptedBetter.txt', 'wt') as text_decrypted3:
+                for charr in qq:
+                    try:
+                        index1 = FrequencyOfLetters.index(charr)
+                        index2 = FrequencyOfLettersUpd.index(charr)
+                        if index1 != index2:
+                            character2 = FrequencyOfLettersUpd[index1]
+                            Message4.append(character2)
+                        else:
+                            Message4.append(charr)
+                    except ValueError:
+                        Message4.append(charr)
+
+                text_decrypted3.write(''.join(Message4))
 
 
 
-            text_original.close()
-            text_encrypted.close()
-            text_decrypted.close()
+            # text_original.close()
+            # text_encrypted.close()
+            # text_decrypted.close()
+            # text_decrypted2.close()
+            # text_decrypted3.close()
 
         elif number == 0:
             break

@@ -29,9 +29,9 @@ def isContainsRussianLetters(str_check):
         return True
 
 
-def caesar(key, index, text):
+def caesar(key, index, text, is_print = True):
     NewAlphabet = removeDuplicateAlphabet(key, Alphabet)
-    NewAlphabet = NewAlphabet[-index:] + key + NewAlphabet[:-index]
+    NewAlphabet = NewAlphabet[-int(index):] + key + NewAlphabet[:-int(index)]
 
     message = []
     for character in text:
@@ -42,9 +42,10 @@ def caesar(key, index, text):
         except ValueError:
             message.append(character)
 
-    # print('\nОригинальный алфавит:\t' + Alphabet)
-    # print('Новый алфавит:\t\t\t' + NewAlphabet)
-    # print("Зашифрованный текст: " + ''.join(message))
+    if is_print:
+        print('\nОригинальный алфавит:\t' + Alphabet)
+        print('Новый алфавит:\t\t\t' + NewAlphabet)
+        print("Зашифрованный текст: " + ''.join(message))
 
     return ''.join(message) #, NewAlphabet
 
