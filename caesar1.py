@@ -23,10 +23,18 @@ def removeDuplicateAlphabet(str, alphabet): #удаление ключа из а
     return alphabet
 
 def isContainsRussianLetters(str_check):
+    flag = False
     for i in str_check:
         if ord('а') <= ord(i) <= ord('я'):
-            return False
+            flag = True
+        else:
+            flag = False
+            break
+
+    if flag:
         return True
+    else:
+        return False
 
 
 def caesar(key, index, text, is_print = True):

@@ -11,7 +11,7 @@ def remove_chars_from_text(text, chars):
 def input_key():
     print("Введите ключ:")
     func_key = input().lower()
-    while (not (c.is_unique(func_key))) or (len(func_key) > 32 or len(func_key) < 0) or c.isContainsRussianLetters(func_key):
+    while (not (c.is_unique(func_key))) or (len(func_key) > 32 or len(func_key) < 0) or not c.isContainsRussianLetters(func_key):
         print("Неправильный ключ, повторите ввод")
         func_key = input().lower()
     return func_key
